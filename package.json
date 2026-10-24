@@ -1,0 +1,27 @@
+{
+  "name": "special-touch",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "vite preview",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p cypress",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:5173 cy:run",
+    "screenshots": "start-server-and-test dev http://localhost:5173 \"cypress run --config specPattern=cypress/shots/*.cy.ts,screenshotOnRunFailure=false\""
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "axe-core": "^4.14.0",
+    "cypress": "^16.2.0",
+    "start-server-and-test": "^3.0.13",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.5"
+  }
+}

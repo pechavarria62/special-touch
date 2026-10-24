@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+
+/* Design tokens — see CLAUDE.md for usage rules.
+   The default palette is cleared so only approved colors exist as utilities. */
+@theme {
+  --color-*: initial;
+  --color-navy-900: #0f1f33;
+  --color-navy-800: #162c47;
+  --color-navy-700: #1e3a5f; /* primary */
+  --color-navy-600: #2a4b75;
+  --color-navy-500: #3a5f8c;
+  --color-navy-100: #e4eaf2;
+  --color-navy-50: #f1f4f8;
+  --color-sage-800: #3f4c34; /* only sage that is safe for small text */
+  --color-sage-700: #556646;
+  --color-sage-500: #9caf88; /* secondary */
+  --color-sage-300: #c4d1b6;
+  --color-sage-100: #edf2e7;
+  --color-white: #ffffff;
+  --color-cream: #f5f1e8; /* page background */
+  --color-cream-200: #ebe4d4;
+  --color-cream-300: #ddd3bd; /* borders */
+  --color-ink: #16202e; /* body text */
+  --color-ink-muted: #44505f;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-serif: Georgia, 'Times New Roman', Times, serif;
+
+  /* Body text: 17px / 1.6. Everything is rem so "Bigger text" can scale the root. */
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 56rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 75rem;
+}
+
+/* Page container: 72rem content, side padding respects the iPhone notch. */
+@utility wrap {
+  width: 100%;
+  max-width: 75rem;
+  margin-inline: auto;
+  padding-inline: max(1rem, env(safe-area-inset-left)) max(1rem, env(safe-area-inset-right));
+  @variant sm {
+    padding-inline: max(1.5rem, env(safe-area-inset-left)) max(1.5rem, env(safe-area-inset-right));
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-cream font-sans text-base text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif font-bold text-balance text-navy-700;
+    line-height: 1.2;
+  }
+
+  a {
+    @apply text-navy-700 underline decoration-from-font underline-offset-[0.18em];
+  }
+
+  /* 3px navy outline + white halo; on navy sections, white outline + navy halo. */
+  :focus-visible {
+    outline: 3px solid var(--color-navy-700);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--color-white);
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-white);
+    box-shadow: 0 0 0 3px var(--color-navy-900);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border-2 px-6 py-2 text-base leading-tight font-semibold no-underline transition-colors;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .btn-primary {
+    @apply border-navy-700 bg-navy-700 text-white hover:border-navy-800 hover:bg-navy-800;
+  }
+
+  /* Sage is a fill only: navy text on sage meets contrast, white text does not. */
+  .btn-secondary {
+    @apply border-sage-700 bg-sage-500 text-navy-900 hover:bg-sage-300;
+  }
+
+  .btn-outline {
+    @apply border-navy-700 bg-white text-navy-700 hover:bg-navy-50;
+  }
+
+  .btn-on-dark {
+    @apply border-white bg-white text-navy-900 hover:bg-navy-50;
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+
+  /* Used together with .btn .btn-primary */
+  .skip-link:focus {
+    @apply not-sr-only fixed top-3 left-3 z-[100];
+  }
+
+  .eyebrow {
+    @apply text-sm font-bold tracking-[0.08em] text-sage-800 uppercase;
+  }
+
+  /* Status messages: icon + label text + border. Never color alone. */
+  .alert {
+    @apply flex items-start gap-3 rounded-md border-2 border-l-8 border-navy-700 bg-navy-50 px-4 py-3 text-ink;
+  }
+
+  .alert-success {
+    @apply border-sage-700 bg-sage-100;
+  }
+
+  .field-label {
+    @apply mb-1.5 block font-bold text-ink;
+  }
+
+  .field-input {
+    @apply block min-h-12 w-full rounded-md border-2 border-navy-500 bg-white px-3 py-2 text-base text-ink;
+  }
+
+  .field-input[aria-invalid='true'] {
+    @apply border-[3px] border-dashed border-navy-700;
+  }
+
+  .field-error {
+    @apply mt-2 flex items-start gap-2 text-sm font-bold text-ink;
+  }
+}
