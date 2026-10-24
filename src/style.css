@@ -1,35 +1,51 @@
 @import 'tailwindcss';
 
+/* The design reference mockups are not part of the site. */
+@source not '../design';
+
 /* Design tokens — see CLAUDE.md for usage rules.
-   The default palette is cleared so only approved colors exist as utilities. */
+   The default palette is cleared so only approved colors exist as utilities.
+   Nothing is brighter than cream: every light surface and all text on navy use it. */
 @theme {
-  --color-*: initial;
-  --color-navy-900: #0f1f33;
-  --color-navy-800: #162c47;
-  --color-navy-700: #1e3a5f; /* primary */
-  --color-navy-600: #2a4b75;
-  --color-navy-500: #3a5f8c;
-  --color-navy-100: #e4eaf2;
+  --color-*: initial; /* clear the default palette */
+
   --color-navy-50: #f1f4f8;
-  --color-sage-800: #3f4c34; /* only sage that is safe for small text */
-  --color-sage-700: #556646;
-  --color-sage-500: #9caf88; /* secondary */
-  --color-sage-300: #c4d1b6;
+  --color-navy-100: #e4eaf2;
+  --color-navy-200: #c9d4e3;
+  --color-navy-500: #3a5f8c; /* borders of interactive controls (5.8:1 on cream) */
+  --color-navy-600: #2a4b75;
+  --color-navy-700: #1e3a5f; /* PRIMARY */
+  --color-navy-800: #162c47;
+  --color-navy-900: #0f1f33;
+
   --color-sage-100: #edf2e7;
-  --color-white: #ffffff;
-  --color-cream: #f5f1e8; /* page background */
-  --color-cream-200: #ebe4d4;
-  --color-cream-300: #ddd3bd; /* borders */
+  --color-sage-200: #dbe4d1;
+  --color-sage-300: #c4d1b6;
+  --color-sage-500: #9caf88; /* SECONDARY */
+  --color-sage-700: #556646;
+  --color-sage-800: #3f4c34; /* the only sage allowed for small text */
+
+  --color-cream: #f5f0e6; /* every light surface: pages, cards, text on navy */
+  --color-cream-200: #ebe3d3; /* alternate section bands, panel background */
+  --color-cream-300: #dcd1ba; /* card borders and dividers */
+
   --color-ink: #16202e; /* body text */
-  --color-ink-muted: #44505f;
+  --color-ink-muted: #44505f; /* secondary text */
+
+  /* Keywords, not palette colors: needed for border-transparent, fill-current, etc. */
   --color-transparent: transparent;
   --color-current: currentColor;
 
-  --font-serif: Georgia, 'Times New Roman', Times, serif;
+  --font-sans: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
 
-  /* Body text: 17px / 1.6. Everything is rem so "Bigger text" can scale the root. */
-  --text-base: 1.0625rem;
+  /* Body text: 18px / 1.6. Everything is rem so "Bigger text" can scale the root. */
+  --text-base: 1.125rem;
   --text-base--line-height: 1.6;
+  --text-lg: 1.1875rem; /* lead paragraphs: one step above body */
+  --text-lg--line-height: 1.65;
+
+  --shadow-card: 0 1px 2px rgb(15 31 51 / 0.06), 0 8px 24px -12px rgb(15 31 51 / 0.18);
 
   --breakpoint-sm: 40rem;
   --breakpoint-md: 56rem;
@@ -37,7 +53,9 @@
   --breakpoint-xl: 75rem;
 }
 
-/* Page container: 72rem content, side padding respects the iPhone notch. */
+/* ---------- Reusable utilities (Tailwind v4 @utility, so variants like hover: and lg: work) ---------- */
+
+/* Page container: side padding respects the iPhone notch. */
 @utility wrap {
   width: 100%;
   max-width: 75rem;
@@ -47,6 +65,99 @@
     padding-inline: max(1.5rem, env(safe-area-inset-left)) max(1.5rem, env(safe-area-inset-right));
   }
 }
+
+/* Pill buttons, at least 44px tall. Focus ring comes from the base :focus-visible rule. */
+@utility btn {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border-2 px-6 py-2 text-base leading-tight font-bold no-underline transition-colors;
+  @apply disabled:cursor-not-allowed disabled:opacity-55 aria-disabled:cursor-not-allowed aria-disabled:opacity-55;
+}
+
+@utility btn-primary {
+  @apply border-navy-700 bg-navy-700 text-cream hover:border-navy-800 hover:bg-navy-800 active:bg-navy-900;
+}
+
+/* Sage is a fill only: navy text on sage meets contrast, cream text does not. */
+@utility btn-secondary {
+  @apply border-sage-700 bg-sage-500 text-navy-900 hover:bg-sage-300 active:bg-sage-200;
+}
+
+@utility btn-outline {
+  @apply border-navy-700 bg-cream text-navy-700 hover:bg-navy-50 active:bg-navy-100;
+}
+
+@utility btn-on-dark {
+  @apply border-cream bg-cream text-navy-800 hover:bg-cream-200 active:bg-cream-300;
+}
+
+@utility btn-sm {
+  @apply gap-1.5 px-4 text-[0.9375rem];
+}
+
+/* Eyebrow label: short sage line + uppercase, letter-spaced text. */
+@utility eyebrow {
+  @apply flex items-center gap-3 text-sm font-bold tracking-[0.12em] text-sage-800 uppercase before:h-0.5 before:w-8 before:bg-sage-700 before:content-[''];
+}
+
+/* Eyebrow on navy bands. */
+@utility eyebrow-dark {
+  @apply flex items-center gap-3 text-sm font-bold tracking-[0.12em] text-sage-300 uppercase before:h-0.5 before:w-8 before:bg-sage-300 before:content-[''];
+}
+
+/* "Open Doors" doorway arch: rounded top, softly rounded bottom corners. */
+@utility arch {
+  @apply overflow-hidden rounded-t-full rounded-b-3xl;
+}
+
+/* Main nav link. Current page: bold + underline + a navy bar (left on phones, under the link on PC). */
+@utility nav-link {
+  @apply flex min-h-11 items-center rounded-lg px-4 py-2 text-lg text-navy-900 no-underline hover:underline;
+  @apply aria-[current=page]:bg-navy-50 aria-[current=page]:font-bold aria-[current=page]:underline aria-[current=page]:shadow-[inset_4px_0_0_var(--color-navy-700)];
+  @apply lg:rounded-none lg:px-2 lg:py-3.5 lg:text-base lg:aria-[current=page]:bg-transparent lg:aria-[current=page]:shadow-[inset_0_-3px_0_var(--color-navy-700)];
+}
+
+/* Choice chip: a <label class="group chip"> around a visually hidden radio/checkbox.
+   Selected = filled navy + cream text + check mark + thicker border (never color alone). */
+@utility chip {
+  @apply inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 border-navy-500 bg-cream px-4 py-2 font-bold text-navy-700 hover:bg-navy-50;
+  @apply has-checked:border-[3px] has-checked:border-navy-900 has-checked:bg-navy-700 has-checked:px-[0.9375rem] has-checked:text-cream;
+  @apply has-focus-visible:shadow-[0_0_0_3px_var(--color-cream)] has-focus-visible:outline-3 has-focus-visible:outline-offset-3 has-focus-visible:outline-navy-700;
+}
+
+@utility footer-heading {
+  @apply font-sans text-sm font-bold tracking-[0.12em] text-sage-300 uppercase;
+}
+
+@utility card {
+  @apply rounded-3xl border border-cream-300 bg-cream shadow-card;
+}
+
+@utility skip-link {
+  @apply sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100;
+}
+
+/* Status messages: icon + label text + thick left border. Never color alone; no warning hues (see CLAUDE.md). */
+@utility alert {
+  @apply flex items-start gap-3 rounded-xl border-2 border-l-8 border-navy-700 bg-navy-50 px-4 py-3 text-ink;
+}
+
+@utility alert-success {
+  @apply border-sage-700 bg-sage-100;
+}
+
+@utility field-label {
+  @apply mb-1.5 block font-bold text-ink;
+}
+
+@utility field-input {
+  @apply block min-h-12 w-full rounded-xl border-2 border-navy-500 bg-cream px-3 py-2 text-base text-ink;
+  @apply aria-invalid:border-[3px] aria-invalid:border-dashed aria-invalid:border-navy-700;
+}
+
+@utility field-error {
+  @apply mt-2 flex items-start gap-2 font-bold text-ink;
+}
+
+/* ---------- Element defaults ---------- */
 
 @layer base {
   html {
@@ -67,23 +178,23 @@
   h2,
   h3,
   h4 {
-    @apply font-serif font-bold text-balance text-navy-700;
-    line-height: 1.2;
+    @apply font-display font-semibold text-balance text-navy-700;
+    line-height: 1.15;
   }
 
   a {
     @apply text-navy-700 underline decoration-from-font underline-offset-[0.18em];
   }
 
-  /* 3px navy outline + white halo; on navy sections, white outline + navy halo. */
+  /* 3px navy outline + cream halo; on navy sections, cream outline + navy halo. */
   :focus-visible {
     outline: 3px solid var(--color-navy-700);
     outline-offset: 3px;
-    box-shadow: 0 0 0 3px var(--color-white);
+    box-shadow: 0 0 0 3px var(--color-cream);
   }
 
   .on-dark :focus-visible {
-    outline-color: var(--color-white);
+    outline-color: var(--color-cream);
     box-shadow: 0 0 0 3px var(--color-navy-900);
   }
 
@@ -95,71 +206,5 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-  }
-}
-
-@layer components {
-  .btn {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full border-2 px-6 py-2 text-base leading-tight font-semibold no-underline transition-colors;
-  }
-
-  .btn:disabled,
-  .btn[aria-disabled='true'] {
-    @apply cursor-not-allowed opacity-50;
-  }
-
-  .btn-primary {
-    @apply border-navy-700 bg-navy-700 text-white hover:border-navy-800 hover:bg-navy-800;
-  }
-
-  /* Sage is a fill only: navy text on sage meets contrast, white text does not. */
-  .btn-secondary {
-    @apply border-sage-700 bg-sage-500 text-navy-900 hover:bg-sage-300;
-  }
-
-  .btn-outline {
-    @apply border-navy-700 bg-white text-navy-700 hover:bg-navy-50;
-  }
-
-  .btn-on-dark {
-    @apply border-white bg-white text-navy-900 hover:bg-navy-50;
-  }
-
-  .skip-link {
-    @apply sr-only;
-  }
-
-  /* Used together with .btn .btn-primary */
-  .skip-link:focus {
-    @apply not-sr-only fixed top-3 left-3 z-[100];
-  }
-
-  .eyebrow {
-    @apply text-sm font-bold tracking-[0.08em] text-sage-800 uppercase;
-  }
-
-  /* Status messages: icon + label text + border. Never color alone. */
-  .alert {
-    @apply flex items-start gap-3 rounded-md border-2 border-l-8 border-navy-700 bg-navy-50 px-4 py-3 text-ink;
-  }
-
-  .alert-success {
-    @apply border-sage-700 bg-sage-100;
-  }
-
-  .field-label {
-    @apply mb-1.5 block font-bold text-ink;
-  }
-
-  .field-input {
-    @apply block min-h-12 w-full rounded-md border-2 border-navy-500 bg-white px-3 py-2 text-base text-ink;
-  }
-
-  .field-input[aria-invalid='true'] {
-    @apply border-[3px] border-dashed border-navy-700;
-  }
-
-  .field-error {
-    @apply mt-2 flex items-start gap-2 text-sm font-bold text-ink;
   }
 }

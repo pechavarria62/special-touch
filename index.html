@@ -1,23 +1,38 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!--@head-->
-    <title>Special Touch Ministry | Easing and enriching the lives of people impacted by disability</title>
-    <meta name="description" content="Since 1982, Special Touch Ministry has helped people with disabilities experience God, be included in the church, and build meaningful relationships with caring believers." />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1e3a5f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Special Touch Ministry | Opening the doors of the church to every body</title>
+    <meta name="description" content="Since 1982, Special Touch Ministry has helped people with disabilities experience God, belong in the church, and build lasting friendships." />
   </head>
   <body>
-    <!--@header-->
+    <div id="top">
+      <a class="skip-link btn btn-primary" href="#main">Skip to main content</a>
+      <button type="button" class="skip-link btn btn-primary" data-a11y-open>Accessibility options</button>
+    </div>
+
+    <header id="site-header"></header>
+
     <main id="main" tabindex="-1" class="focus:outline-none">
-      <!-- Home page sections are built in step 3 (see design/mockups/01–03). -->
-      <section class="wrap py-16">
-        <p class="eyebrow">Since 1982</p>
-        <h1 class="mt-3 text-4xl md:text-5xl">Easing and enriching the lives of people impacted by disability</h1>
-        <p class="mt-4 max-w-2xl text-lg text-ink-muted">
-          We help people with disabilities experience God, be included in the church, and build meaningful relationships with caring believers.
-        </p>
-      </section>
+      <noscript>
+        <div class="wrap py-16">
+          <h1 class="text-4xl">Special Touch Ministry, Inc.</h1>
+          <p class="mt-4 max-w-2xl text-lg">
+            This website needs JavaScript. To reach us, call <a href="tel:+17152582713">715-258-2713</a> or email
+            <a href="mailto:ministry@specialtouch.org">ministry@specialtouch.org</a>.
+          </p>
+        </div>
+      </noscript>
     </main>
-    <!--@footer-->
+
+    <footer id="site-footer" class="on-dark bg-navy-800 text-cream"></footer>
+
+    <!-- Announces each page change to screen readers. -->
+    <div id="route-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

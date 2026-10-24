@@ -3,7 +3,14 @@
 // which stitches scrolled frames and duplicates content on narrow viewports.
 const pages: [string, string][] = [
   ['home', '/'],
-  ['design-system', '/design-system/'],
+  ['about', '/about'],
+  ['get-away', '/get-away'],
+  ['blind-services', '/blind-services'],
+  ['chapters', '/chapters'],
+  ['dfc', '/disability-friendly-church'],
+  ['family-support', '/family-support'],
+  ['contact', '/contact'],
+  ['donate', '/donate'],
 ]
 const viewports: [string, number, number][] = [
   ['phone', 390, 844],

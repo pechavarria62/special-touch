@@ -4,26 +4,45 @@ Guidance for Claude Code when working in this repository.
 
 ## Project
 
-`special-touch` is a TypeScript (Node.js, ESM) project.
+`special-touch` is the website for Special Touch Ministry, Inc.: a Vite single-page app written in TypeScript (strict) and Tailwind CSS v4. No UI framework (no Astro, React, Vue, etc.) and no router library.
+
+- `index.html` (project root) is the only HTML file outside `src/`. It holds the page shell: skip links, `#site-header`, `<main id="main">`, `#site-footer`, the `#route-announcer` live region and the `src/main.ts` script.
+- Every page is a `.tsx` file in `src/pages/` (no page `.html` or `.ts` files). It exports `render()` (returns JSX) and, optionally, `mount(root)` for behavior, which returns a cleanup function.
+- JSX is rendered to HTML strings by our own tiny runtime in `src/jsx.ts` (`h` / `Fragment`; tsconfig `jsxFactory`, and `oxc.jsx` in `vite.config.ts`). It is NOT React: no hooks, no state, no event props. Write `class`, not `className`; text and attributes are escaped, and `raw()` marks trusted HTML. Every `.tsx` file imports `h` (and `Fragment` if it uses `<>…</>`) from `jsx.js`.
+- Wire up behavior (forms, filters, toggles) in the page's `mount(root)` with normal DOM code.
+- Shared JSX components (`Breadcrumb`, `Eyebrow`, `Icon`, `ArchTile`, `ArchIcon`, `ArchPhoto`, `Picture`, `Required`, `Honeypot`) live in `src/components/ui.tsx`; page data lives in `src/data/` (e.g. `camps.ts`); form validation lives in `src/forms.ts`.
+- Build each page to match its mockups in `design/screens/` (PC, tablet and phone).
+- Add every page to `src/routes.ts` (`{ path, title, page }`). Unknown URLs render `src/pages/not-found.ts`.
+- `src/router.ts` intercepts same-site link clicks (History API). After each navigation it sets the title, updates `aria-current` in the nav, scrolls to the top or `#hash`, focuses the `h1`, announces "<Page> page" and fires a `route:change` event.
+- The header and footer are HTML strings from `src/layout/header.ts` and `src/layout/footer.ts`; `setCurrentNav(path)` marks the current nav link.
+- Icons: use `<Icon name="…" />` in `.tsx`; plain `.ts` modules (header, footer, forms) call `icon()` from `src/icons.ts`.
+- Direct URLs on the host need an SPA fallback: `public/_redirects` (`/*  /index.html  200`) for Netlify.
 
 ## Commands
 
-- `npm run dev` — run `src/index.ts` with hot reload (`tsx`)
-- `npm run build` — compile TypeScript to `dist/`
-- `npm start` — run the compiled output
-- `npm run typecheck` — type-check without emitting
+- `npm run dev` — start the Vite dev server (http://localhost:5173)
+- `npm run build` — type-check (`tsc`), then build the site to `dist/`
+- `npm start` — preview the built site (`vite preview`)
+- `npm run typecheck` — type-check `src/` (`tsc`, no output files)
+- `npm run test:e2e` — start the dev server and run all Cypress tests headlessly
+- `npm run cy:open` — open the interactive Cypress runner (needs `npm run dev` running)
+- `npm run screenshots` — full-page review screenshots into `cypress/screenshots/`
 
 ## Conventions
 
 - Source lives in `src/`; build output goes to `dist/` (never edit `dist/`).
 - TypeScript `strict` mode is on. Avoid `any`; prefer explicit types on exported functions.
 - ES modules (`"type": "module"`, `NodeNext` resolution): relative imports need the `.js` extension, e.g. `import { x } from "./x.js"`.
+- Images live in `public/images/` as a JPG/PNG plus a WebP copy; use `<picture>` with the WebP `<source>` first.
 
 ## Styling
 
 - Use Tailwind CSS only (v4, via `@tailwindcss/vite`). Style with Tailwind utility classes.
 - Do not write custom CSS files, inline `style` attributes, CSS-in-JS, or add any other styling framework or UI library.
-- Design tokens live in the `@theme` block in `src/style.css`. The default Tailwind palette is cleared, so only approved colors and their shades exist (`navy-50`–`navy-900`, `sage-100`–`sage-800`, `white`, `cream`, `cream-200`, `cream-300`, `ink`, `ink-muted`). Add or change tokens there only.
+- Design tokens live in the `@theme` block in `src/style.css`. The default Tailwind palette is cleared, so only approved colors and their shades exist (`navy-50`–`navy-900`, `sage-100`–`sage-800`, `cream`, `cream-200`, `cream-300`, `ink`, `ink-muted`). Add or change tokens there only.
+- There is no white token. Anything that would be white (surfaces, text on navy, button text, focus halos) uses `cream` (#F5F0E6).
+- Reusable component classes (`btn`, `btn-primary`, `card`, `arch`, `eyebrow`, `field-input`, …) are Tailwind `@utility` definitions in `src/style.css`. Reuse them before writing long class lists.
+- Hand-written selectors are only allowed in `@layer base` in `src/style.css` (element defaults and the accessibility tool's `data-st-*` effects).
 - Use arbitrary values (e.g. `bg-[#...]`) only for non-color values, and only when no theme value fits.
 
 ## Testing
@@ -31,6 +50,9 @@ Guidance for Claude Code when working in this repository.
 - End-to-end tests use Cypress and live in `cypress/e2e/*.cy.ts`.
 - `npm run test:e2e` — start the dev server and run all Cypress tests headlessly
 - `npm run cy:open` — open the interactive Cypress runner (needs `npm run dev` running)
+- Accessibility checks use `axe-core` directly through the `cy.checkA11y()` command in `cypress/support/e2e.ts` (`cypress-axe` does not support Cypress 16).
+- A color guard test fails on pure white or any red, in rendered pages and in `src/`.
+- If Cypress fails to start with `bad option: --no-sandbox`, the shell has `ELECTRON_RUN_AS_NODE` set (VS Code does this); run it with `env -u ELECTRON_RUN_AS_NODE`.
 - Add or update e2e tests for any user-facing change.
 
 ## UI Design System and Color Guidelines
