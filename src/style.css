@@ -208,3 +208,120 @@
     }
   }
 }
+
+/* ---------- Accessibility tool effects (src/a11y/) ----------
+   Each setting is written to <html> as data-st-<setting>="<level>". These rules must reach every
+   element on the page, so they are the one place with hand-written attribute selectors.
+   Elements marked data-st-keep (the panel, reading overlays) keep their own colors. */
+@layer base {
+  /* Bigger text: the site uses rem everywhere, so scaling the root scales everything. */
+  html[data-st-text='1'] {
+    font-size: 125%;
+  }
+  html[data-st-text='2'] {
+    font-size: 150%;
+  }
+  html[data-st-text='3'] {
+    font-size: 200%;
+  }
+
+  html[data-st-line-height='1'] body * {
+    line-height: 1.9 !important;
+  }
+  html[data-st-line-height='2'] body * {
+    line-height: 2.3 !important;
+  }
+
+  html[data-st-spacing='1'] body * {
+    letter-spacing: 0.06em !important;
+    word-spacing: 0.16em !important;
+  }
+  html[data-st-spacing='2'] body * {
+    letter-spacing: 0.12em !important;
+    word-spacing: 0.32em !important;
+  }
+
+  html[data-st-align] body * {
+    text-align: left !important;
+  }
+
+  /* Readable font: Atkinson Hyperlegible everywhere, headings included, no italics. */
+  html[data-st-font] body * {
+    font-family: var(--font-sans) !important;
+    font-style: normal !important;
+  }
+
+  /* High contrast, dark: deepest navy and cream. Light: cream and ink. Links stay underlined. */
+  html[data-st-contrast='1'] body,
+  html[data-st-contrast='1'] body *:not([data-st-keep], [data-st-keep] *) {
+    background-color: var(--color-navy-900) !important;
+    background-image: none !important;
+    color: var(--color-cream) !important;
+    border-color: var(--color-cream) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  html[data-st-contrast='2'] body,
+  html[data-st-contrast='2'] body *:not([data-st-keep], [data-st-keep] *) {
+    background-color: var(--color-cream) !important;
+    background-image: none !important;
+    color: var(--color-ink) !important;
+    border-color: var(--color-ink) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  html[data-st-contrast] body a:not([data-st-keep] *) {
+    text-decoration-line: underline !important;
+  }
+
+  /* The navy logo would vanish on navy: swap in the cream logo. */
+  html[data-st-contrast='1'] [data-logo='navy'] {
+    display: none !important;
+  }
+  html[data-st-contrast='1'] [data-logo='cream'] {
+    display: block !important; /* beats the .hidden utility, which sits in a later layer */
+  }
+
+  html[data-st-grayscale] :is(#site-header, #main, #site-footer) {
+    filter: grayscale(1);
+  }
+
+  html[data-st-images] :is(#site-header, #main, #site-footer) img {
+    visibility: hidden;
+  }
+
+  html[data-st-motion] *,
+  html[data-st-motion] ::before,
+  html[data-st-motion] ::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Big cursor: a 48px navy arrow with a cream outline. */
+  html[data-st-cursor],
+  html[data-st-cursor] * {
+    cursor:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 2l15 11-7 1.2-3.6 7.3z' fill='%231e3a5f' stroke='%23f5f0e6' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+        8 4,
+      auto !important;
+  }
+
+  /* Highlight links: thick underline, bold, and a dashed outline (shape, not just color). */
+  html[data-st-links] body a:not([data-st-keep] *) {
+    text-decoration-line: underline !important;
+    text-decoration-thickness: 3px !important;
+    text-underline-offset: 0.2em !important;
+    font-weight: 700 !important;
+    outline: 2px dashed currentColor;
+    outline-offset: 3px;
+  }
+
+  /* Strong focus: a much thicker ring with a wide cream halo, for mouse clicks too. */
+  html[data-st-focus] :focus,
+  html[data-st-focus] :focus-visible {
+    outline: 5px solid var(--color-navy-700) !important;
+    outline-offset: 4px !important;
+    box-shadow: 0 0 0 10px var(--color-cream) !important;
+  }
+}

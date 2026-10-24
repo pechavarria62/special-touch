@@ -136,7 +136,7 @@ function Select({ id, name, options, required }: { id: string; name: string; opt
 function StepPanel({ n, children }: { n: number; children?: Child }): Html {
   return (
     <div data-step={n} hidden={n !== 1} class="space-y-5">
-      <h3 id={`step-${n}-h`} tabindex="-1" class="text-2xl focus:outline-none">
+      <h3 id={`step-${n}-h`} tabindex="-1" class="text-2xl focus:shadow-none focus:outline-none">
         {stepTitles[n - 1]}
       </h3>
       {children}

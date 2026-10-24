@@ -16,6 +16,7 @@ Guidance for Claude Code when working in this repository.
 - `src/router.ts` intercepts same-site link clicks (History API). After each navigation it sets the title, updates `aria-current` in the nav, scrolls to the top or `#hash`, focuses the `h1`, announces "<Page> page" and fires a `route:change` event.
 - The header and footer are HTML strings from `src/layout/header.ts` and `src/layout/footer.ts`; `setCurrentNav(path)` marks the current nav link.
 - Icons: use `<Icon name="…" />` in `.tsx`; plain `.ts` modules (header, footer, forms) call `icon()` from `src/icons.ts`.
+- Accessibility tool (`src/a11y/`): `settings.ts` (settings, profiles, `localStorage` key `st-a11y:v1`), `panel.tsx` (launcher + panel), `overlays.ts` (reading mask/guide), `speech.ts` (read aloud, also used by Blind Services). Each setting is written to `<html>` as `data-st-<id>="<level>"`; its CSS effect lives in `src/style.css`. An inline script in `index.html` applies saved settings before first paint. Anything with `data-a11y-open` opens the panel; mark elements `data-st-keep` to exclude them from high contrast.
 - Direct URLs on the host need an SPA fallback: `public/_redirects` (`/*  /index.html  200`) for Netlify.
 
 ## Commands

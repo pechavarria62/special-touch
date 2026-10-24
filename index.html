@@ -4,7 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#1e3a5f" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Favicons: the cream logo on navy. -->
+    <link rel="icon" href="public/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="public/favicon-48.png" />
+    <link rel="apple-touch-icon" href="public/apple-touch-icon.png" />
+    <link rel="manifest" href="public/site.webmanifest" />
+    <!-- Apply saved accessibility settings before the first paint (see src/a11y/settings.ts). -->
+    <script>
+      try {
+        var s = JSON.parse(localStorage.getItem('st-a11y:v1') || '{}').settings || {}
+        for (var k in s) if (/^[a-z-]+$/.test(k) && s[k] > 0 && s[k] < 4) document.documentElement.setAttribute('data-st-' + k, String(s[k]))
+      } catch (e) {}
+    </script>
     <title>Special Touch Ministry | Opening the doors of the church to every body</title>
     <meta name="description" content="Since 1982, Special Touch Ministry has helped people with disabilities experience God, belong in the church, and build lasting friendships." />
   </head>

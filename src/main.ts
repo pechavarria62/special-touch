@@ -4,6 +4,7 @@ import '@fontsource/fraunces/500.css'
 import '@fontsource/fraunces/600.css'
 import '@fontsource/fraunces/600-italic.css'
 import './style.css'
+import { initA11y } from './a11y/index.js'
 import { renderFooter } from './layout/footer.js'
 import { renderHeader } from './layout/header.js'
 import { initNav, initSearch } from './nav.js'
@@ -18,5 +19,5 @@ if (footer) footer.innerHTML = renderFooter()
 
 initNav()
 initSearch()
-// The accessibility tool starts here in step 2.
+initA11y()
 if (main) startRouter(main)

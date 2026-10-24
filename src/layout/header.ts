@@ -56,9 +56,14 @@ export function renderHeader(): string {
     <div class="wrap flex items-center justify-between gap-3 py-3 lg:py-4">
       <div class="flex min-w-0 items-center gap-5">
         <a href="/" class="block min-w-12 rounded-sm">
-          <picture>
+          <picture data-logo="navy">
             <source srcset="/images/logo-navy.webp" type="image/webp" />
             <img src="/images/logo-navy.png" alt="Special Touch Ministry, Inc., home" width="640" height="297" class="h-auto w-20 max-w-full sm:w-36 lg:w-44" />
+          </picture>
+          <!-- Shown instead of the navy logo in the dark high-contrast mode (src/style.css). -->
+          <picture data-logo="cream" class="hidden">
+            <source srcset="/images/logo-cream.webp" type="image/webp" />
+            <img src="/images/logo-cream.png" alt="Special Touch Ministry, Inc., home" width="640" height="297" class="h-auto w-20 max-w-full sm:w-36 lg:w-44" loading="lazy" />
           </picture>
         </a>
         <p class="hidden max-w-64 border-l-2 border-sage-500 pl-5 font-display leading-snug text-navy-700 italic lg:block">

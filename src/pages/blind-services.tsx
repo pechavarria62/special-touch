@@ -1,6 +1,7 @@
 // Blind Services — design/screens/08-blind-services-pc.png, 09-blind-services-phone.png
 import { Badge, Breadcrumb, Eyebrow, Icon, Picture } from '../components/ui.js'
 import { icon, type IconName } from '../icons.js'
+import { isSpeaking, onSpeakingChange, readPage, speechSupported, stopSpeaking } from '../a11y/speech.js'
 import { Fragment, h, type Html } from '../jsx.js'
 
 // TODO(confirm): Tzadi kit video, per-resource "Learn more" pages and the Audio & Braille Resource Directory.
@@ -269,14 +270,14 @@ export function render(): Html {
   )
 }
 
-/** "Listen to this page" reads the page's main content aloud with the browser's speech engine. */
+/** "Listen to this page" starts the accessibility tool's "Read this page" (shared speech module). */
 export function mount(root: HTMLElement): () => void {
   const button = root.querySelector<HTMLButtonElement>('[data-listen]')
   const label = root.querySelector<HTMLElement>('[data-listen-label]')
   const iconSlot = root.querySelector<HTMLElement>('[data-listen-icon]')
   if (!button || !label || !iconSlot) return () => {}
 
-  if (!('speechSynthesis' in window)) {
+  if (!speechSupported) {
     button.hidden = true
     root.querySelector<HTMLElement>('[data-listen-unsupported]')?.classList.remove('hidden')
     return () => {}
@@ -286,24 +287,12 @@ export function mount(root: HTMLElement): () => void {
     label.textContent = reading ? 'Stop reading' : 'Listen to this page'
     iconSlot.innerHTML = icon(reading ? 'stop' : 'speaker')
   }
-
-  const onClick = (): void => {
-    if (speechSynthesis.speaking) {
-      speechSynthesis.cancel()
-      setReading(false)
-      return
-    }
-    const utterance = new SpeechSynthesisUtterance(root.innerText)
-    utterance.lang = 'en-US'
-    utterance.onend = () => setReading(false)
-    utterance.onerror = () => setReading(false)
-    speechSynthesis.speak(utterance)
-    setReading(true)
-  }
+  const onClick = (): void => (isSpeaking() ? stopSpeaking() : readPage())
 
   button.addEventListener('click', onClick)
+  const unsubscribe = onSpeakingChange(setReading)
   return () => {
     button.removeEventListener('click', onClick)
-    speechSynthesis.cancel()
+    unsubscribe()
   }
 }
