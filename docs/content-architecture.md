@@ -1,0 +1,48 @@
+
+## Basic site / content map
+
+-  Home
+  - Above the fold
+    - Primary menu
+    - Logo + slogan
+    - Call to actions for primary site visitors:
+      -  Parishioners w/ disabilities
+      -  Parishioners who want to implement programs (Volunteers, Pastors, church leaders)
+    - Below the fold
+      - About with Mission, Vision, Purpose that leads into...
+      - We want to highlight specific success stories from those with disabilities and those who implemented programs at their churches.
+      - News, 1-2 articles, and then link to a page with all Newsletters.
+      - Social media links and footer
+  -  About
+    - Team
+    - Board of Directors
+    - Policies
+  -  Parishioners w/ disabilities
+    - Goal: Build confidence to participate in their own way
+    - How
+    - Success stories from those with disabilities
+    - Resources (cross-link to specific section below)
+  -  Parishioners who want to implement programs
+    - Goal: Help someone take the 1st step to take initiative
+    - What can I do today?
+    - Tools (current Blind Services section)
+    - Learning Resources (cross-link to specific section below)
+    - Community
+      - “Find people near me”
+      - Map of chapters
+      - Search
+      - How to start my own chapter → link to Resources page
+  -  Programs
+    - Get Away
+    - Disability Friendly Church
+    - Family of Hope
+    - Special Touch Blind Services
+    - STM Online Community
+    - Etc...
+  -  Resources
+    - Resources (categorized by disability)
+    - Tools to download or purchase
+    - Chapter organization
+-  Newsletter
+-  Donate
+-  Social media
